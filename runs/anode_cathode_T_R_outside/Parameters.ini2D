@@ -1,0 +1,110 @@
+**********************************************
+************ GENERAL PARAMETERS **************
+**********************************************
+Grid Step           (mm)     : 0.003
+Vmax                (mm/us)  : 7.300
+Simulation Length   (us)     : 10.000
+CFL Coefficient              : 0.990
+Absorption Type              : 0
+
+**********************************************
+************** Boundary Conditions *************
+**** 0: PML, 1:Symetrical, 2:Free, 3:Rigid *****
+************************************************
+
+X1_low Boundary              : 0
+X1_high Boundary             : 0
+X2_low Boundary              : 0
+X2_high Boundary             : 0
+
+************** PML Parameters ****************
+PML Thickness   (grid step)  : 30
+Vmax in PML     (mm/us)      : 1.500
+PML Efficiency     (dB)      : 120.000
+
+********** TYPE OF SOURCE TERMS  *************
+* 1: source term in the equations (default)
+* 2: forced values
+
+**********************************************
+Type of Source Terms         : 2
+
+*********************************************
+***** DEFINITION OF BUILT-IN SOURCE TERMS *****
+***********************************************
+* Definition of a 1D emitters Array
+
+Nb of T11 Emitters Arrays    : 1
+-1 signal.sgl
+2
+4001	299
+1	20	12	0	0
+0.0	2.000
+
+Nb of T22 Emitters Arrays    : 0
+
+Nb of T12 Emitters Arrays    : 0
+
+Nb of  V1 Emitters Arrays    : 0
+
+Nb of  V2 Emitters Arrays    : 0
+
+
+*********************************************
+************* SNAPSHOT RECORDING **************
+***********************************************
+
+Snapshots Record Period  (us): 1
+
+Record T11 Snapshots         : 1
+Record T22 Snapshots         : 0
+Record T12 Snapshots         : 0
+Record  V1 Snapshots         : 0
+Record  V2 Snapshots         : 0
+Record   V Snapshots         : 1
+
+*********************************************
+******* DEFINITION OF MATERIALS PROPERTIES ****
+***********************************************
+* Index Density	c11	c22	c12	c66
+
+Starts Materials List
+0 	1.00 	2.25 	2.25	2.25	0.00 	water
+1 	7.93 	515.00 	515.00	515.00	515.00 	stainlessSteel
+2 	2.05 	1105.00 	1105.00	204.00	450.00 	anode
+3 	5.01 	422.00 	422.00	106.00	68.10 	cathode
+4 	8.96 	75.80 	113.90	-10.50	10.50 	positive
+5 	2.70 	69.00 	69.00	69.00	69.00 	negative
+Ends Materials List
+
+*********************************************
+******* DEFINITION OF RECEIVERS ARRAYS ****
+***********************************************
+* Definition of a 1D receivers Array
+
+Nb of T11 Receivers Array    : 4
+R001
+1
+4001	299
+0	0	0
+R002
+1
+4001	7702
+0	0	0
+R003
+1
+4001	858
+0	0	0
+R004
+1
+4001	3702
+0	0	0
+
+Nb of T22 Receivers Array    : 0
+
+Nb of T12 Receivers Array    : 0
+
+Nb of  V1 Receivers Array    : 0
+
+Nb of  V2 Receivers Array    : 0
+

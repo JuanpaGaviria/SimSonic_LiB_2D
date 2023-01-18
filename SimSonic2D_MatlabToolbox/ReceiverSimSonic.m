@@ -4,11 +4,11 @@ classdef ReceiverSimSonic
     %   Detailed explanation goes here
 
     properties
-        Type                (1,:) char = 'T11';
-        FileNameToSave      (1,:) char = 'R001';
-        NormalOrientation   (1,1) uint8 = 1;
-        Origin              (1,2) uint64 = [980 500];
-        ConditionsArray     (1,3) uint64 = [1 1 1];
+        Type                (1,:) char;
+        FileNameToSave      (1,:) char;
+        NormalOrientation   (1,1) uint8;
+        Origin              (1,2) uint64;
+        ConditionsArray     (1,3) uint64;
     end
 
     methods

@@ -4,15 +4,16 @@ classdef MaterialsSimSonic
     %   Detailed explanation goes here
 
     properties
-        Type            (1,:) char = 'water';
-        Index           (1,:) uint64 = 0;
-        Density         (1,1) double = 1.0;
-        CValues         (1,:) double = [2.25 2.25 2.25 0.0];
+        Type            (1,:) char;
+        Index           (1,:) uint64;
+        Density         (1,1) double;
+        CValues         (1,:) double;
     end
 
     methods
-        function obj = MaterialsSimSonic(type,density,cValues)
+        function obj = MaterialsSimSonic(type,index,density,cValues)
             obj.Type = type;
+            obj.Index = index;
             obj.Density = density;
             obj.CValues = cValues;
         end
