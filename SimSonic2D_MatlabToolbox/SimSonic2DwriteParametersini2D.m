@@ -5,8 +5,8 @@ if nargin == 4
     fileName ='Parameters.ini2D';
 end
 
-VARarryas = ["T11" "T22" "T12" "V1" "V2"];
-VARarryasAumengted = [VARarryas "V"];
+VARarryas = ["T11" "T22" "T12" "V1 " "V2 "];
+VARarryasAumengted = [VARarryas "V  "];
 
 X1LowBoundary = parameters.Boundaries(1);
 X1HighBoundary = parameters.Boundaries(2);
