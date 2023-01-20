@@ -1,41 +1,45 @@
 % %% Defining Geometry.map2D file
- grid_step_mm = 0.0025;
-% Geometry_condition = 0;
-% if Geometry_condition == 1
-%     layers = 144;
-%     indexes = [7,6,7,2,5,2,7,6,7,3,4,3];  %Geometric unit
-%     esp_2 = 0.066;  % anode
-%     esp_3 = 0.059;  % cathode
-%     esp_4 = 0.01;  % positive
-%     esp_5 = 0.01;  % negative
-%     esp_6 = 0.025;  % separator
-%     esp_7 = 0.015;  % electrolite
-%     espesor_list = [esp_7,esp_6,esp_7,esp_2,esp_5,esp_2,esp_7,esp_6,esp_7,esp_3,esp_4,esp_3];
-%     OD = 18.5;
-%     ND = 18;
-%     external_dim_1 = 20;
-%     external_dim_2 = 20;
-%     % External domain creation
-%     N1 = external_dim_1 / grid_step_mm+1;
-%     N2 = external_dim_2 / grid_step_mm+1;
-%     TotalGeometry_old = uint8(zeros(N1,N2));
-%     TotalGeometry_old = Geometry(OD, ND, grid_step_mm, 1, TotalGeometry_old);
-%     indexes_counter = 1;
-%     %Internal domain creation
-%     for i= 1:layers/2+1
-%         OD = ND;
-%         ND = OD - espesor_list(indexes_counter);
-%         TotalGeometry_old = Geometry(OD, ND, grid_step_mm, indexes(indexes_counter), TotalGeometry_old);
-%         indexes_counter = indexes_counter + 1;
-%         if indexes_counter > numel(indexes)
-%             indexes_counter = 1;
-%         end
-%     end
-% 
-%     figure()
-%     imagesc(TotalGeometry_old);axis image
-%     SimSonic2DWriteMap2D(TotalGeometry_old)
-% end
+grid_step_mm = 0.0025;
+Geometry_condition = true;
+if Geometry_condition
+    indexes = [7,6,2,5,2,6,3,4,3,6];  %Geometric unit
+    esp_2 = 0.066;  % anode
+    esp_3 = 0.059;  % cathode
+    esp_4 = 0.01;  % positive
+    esp_5 = 0.01;  % negative
+    esp_6 = 0.025;  % separator
+    esp_7 = 0.3;  % electrolite
+    espesor_list = [esp_7,esp_6,esp_2,esp_5,esp_2,esp_6,esp_3,esp_4,esp_3,esp_6];
+    esp_geometric_unit = sum(espesor_list,'all');
+    ID = 4;
+    OD = 18.5;
+    ND = 18;
+    layers = round((ND-ID-1)/(esp_geometric_unit))*numel(indexes)*2;
+    external_dim_1 = 20;
+    external_dim_2 = 20;
+    % External domain creation
+    N1 = external_dim_1 / grid_step_mm+1;
+    N2 = external_dim_2 / grid_step_mm+1;
+    TotalGeometry_old = uint8(zeros(N1,N2));
+    TotalGeometry_old = Geometry(OD, ND, grid_step_mm, 1, TotalGeometry_old);
+    indexes_counter = 1;
+    %Internal domain creation
+    for i= 1:layers/2
+        OD = ND;
+        ND = OD - espesor_list(indexes_counter);
+        TotalGeometry_old = Geometry(OD, ND, grid_step_mm, indexes(indexes_counter), TotalGeometry_old);
+        indexes_counter = indexes_counter + 1;
+        if indexes_counter > numel(indexes)
+            indexes_counter = 1;
+        end
+    end
+    ID = ND;
+    TotalGeometry_old = Geometry_Final(ID, grid_step_mm, 7, TotalGeometry_old);
+
+    figure()
+    imagesc(TotalGeometry_old);axis image
+    SimSonic2DWriteMap2D(TotalGeometry_old)
+end
 
 %% Defining Parameters.ini2D genearal parameters
 parameters_condition = true;
@@ -43,8 +47,8 @@ if parameters_condition
     parameters = GeneralParametersSimSonic;
     parameters.Grid_step_mm = grid_step_mm; % mm
     parameters.Vmax = 7.3; % mm/us
-    parameters.SimulationLen = 10; %  Microseconds
-    parameters.SnapRecordPeriod = 1; % microseconds
+    parameters.SimulationLen = 5; %  Microseconds
+    parameters.SnapRecordPeriod = 0.1; % microseconds
     % Type of source terms
     % 1: source term in the equations (default)
     % 2: forced values
