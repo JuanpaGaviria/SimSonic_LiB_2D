@@ -5,8 +5,8 @@ if nargin == 4
     fileName ='Parameters.ini2D';
 end
 
-VARarryas = ["T11" "T22" "T12" "V1 " "V2 "];
-VARarryasAumengted = [VARarryas "V  "];
+VARarryas = ["T11" "T22" "T12" "V1" "V2"];
+VARarryasAumengted = [VARarryas "V"];
 
 X1LowBoundary = parameters.Boundaries(1);
 X1HighBoundary = parameters.Boundaries(2);
@@ -59,7 +59,8 @@ for k = VARarryas
     mask = arrayfun(@(x)strcmp(x.Type, k), emitters);
     emittersFiltered = emitters(mask);
     numEmittersFiltered = numel(emittersFiltered);
-    fprintf(fid,'Nb of %3s Emitters Arrays    : %d\n',k,numEmittersFiltered);
+    numberBlankSpaces = strlength(k);
+    fprintf(fid,'Nb of %s Emitters Arrays%s    : %d\n',k,blanks(3-numberBlankSpaces),numEmittersFiltered);
     for j = 1:numEmittersFiltered
         fprintf(fid,'-1 %s\n',emittersFiltered(j).SignalFileName);
         fprintf(fid,'%d\n',emittersFiltered(j).NormalOrientation);
@@ -76,7 +77,8 @@ fprintf(fid,'***********************************************\n\n');
 
 fprintf(fid,'Snapshots Record Period  (us): %d\n\n',parameters.SnapRecordPeriod);
 for k = 1:numel(VARarryasAumengted)
-    fprintf(fid,'Record %3s Snapshots         : %d\n',VARarryasAumengted(k),parameters.RecordVAR(k));
+    numberBlankSpaces = strlength(VARarryasAumengted(k));
+    fprintf(fid,'Record %s Snapshots%s         : %d\n',VARarryasAumengted(k),blanks(3-numberBlankSpaces),parameters.RecordVAR(k));
 end
 fprintf(fid,'\n*********************************************\n');
 fprintf(fid,'******* DEFINITION OF MATERIALS PROPERTIES ****\n');
@@ -101,7 +103,8 @@ for k = VARarryas
     mask = arrayfun(@(x)strcmp(x.Type, k), receivers);
     receiversFiltered = receivers(mask);
     numReceiversFiltered = numel(receiversFiltered);
-    fprintf(fid,'Nb of %3s Receivers Array    : %d\n',k,numReceiversFiltered);
+    numberBlankSpaces = strlength(k);
+    fprintf(fid,'Nb of %s Receivers Array%s    : %d\n',k,blanks(3-numberBlankSpaces),numReceiversFiltered);
     for j = 1:numReceiversFiltered
         fprintf(fid,'%s\n',receiversFiltered(j).FileNameToSave);
         fprintf(fid,'%d\n',receiversFiltered(j).NormalOrientation);

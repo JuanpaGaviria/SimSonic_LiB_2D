@@ -1,7 +1,9 @@
-.asv
+*.asv
 *.map2D
 *.sgl
 *.rcv2D
 *.snp2D
 *.ver
 .ini2D
+.json
+
