@@ -1,28 +1,3 @@
-%% Defining Signal.sgl file
-
-% Reading JSON file with the signal from the experimental setup
-signal_condition = true;
-
-if signal_condition
-    fileName = 'signal.json';   % filename in JSON extension
-    fid = fopen(fileName);      % Opening the file
-    raw = fread(fid,inf);       % Reading the contents
-    str = char(raw');           % Transformation
-    fclose(fid);                % Closing the file
-    data = jsondecode(str);     % Using the jsondecode function to parse JSON from string
-
-
-%     temporal_step_us=CFL_coeff*grid_step_mm/(sqrt(2)*Vmax);
-% 
-%     timebase=(0:temporal_step_us:duration);
-% 
-%     [signalI,signalQ] = gauspuls(timebase-t0,f0,bw);signal=signalQ;
-%     signal = signal'/max(signal);
-
-    figure(2)
-    plot(data.time,data.amplitude,'.-')
-    SimSonic2DWriteSgl(data.amplitude)
-end
 %% Defining Geometry.map2D file
 grid_step_mm = 0.0025;
 Geometry_condition = true;
@@ -141,3 +116,28 @@ if parameters_condition
     SimSonic2DwriteParametersini2D(parameters,emitters,receivers,materials)
 end
 
+%% Defining Signal.sgl file
+
+% Reading JSON file with the signal from the experimental setup
+signal_condition = true;
+
+if signal_condition
+    fileName = 'signal.json';   % filename in JSON extension
+    fid = fopen(fileName);      % Opening the file
+    raw = fread(fid,inf);       % Reading the contents
+    str = char(raw');           % Transformation
+    fclose(fid);                % Closing the file
+    data = jsondecode(str);     % Using the jsondecode function to parse JSON from string
+
+
+     temporal_step_us = parameters.CFLCoefficient * parameters.Grid_step_mm/(sqrt(2)*parameters.Vmax);
+% 
+%     timebase=(0:temporal_step_us:duration);
+% 
+%     [signalI,signalQ] = gauspuls(timebase-t0,f0,bw);signal=signalQ;
+%     signal = signal'/max(signal);
+
+    figure(2)
+    plot(data.time,data.amplitude,'.-')
+    SimSonic2DWriteSgl(data.amplitude)
+end

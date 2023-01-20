@@ -4,6 +4,6 @@
 *.rcv2D
 *.snp2D
 *.ver
-.ini2D
+*.ini2D
 .json
 

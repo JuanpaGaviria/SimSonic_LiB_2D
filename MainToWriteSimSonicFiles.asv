@@ -1,5 +1,5 @@
-% %% Defining Geometry.map2D file
-grid_step_mm = 0.0025;
+%% Defining Geometry.map2D file
+grid_step_mm = 4.1712e-08;
 Geometry_condition = true;
 if Geometry_condition
     indexes = [7,6,2,5,2,6,3,4,3,6];  %Geometric unit
@@ -20,7 +20,7 @@ if Geometry_condition
     % External domain creation
     N1 = external_dim_1 / grid_step_mm+1;
     N2 = external_dim_2 / grid_step_mm+1;
-    TotalGeometry_old = uint8(zeros(N1,N2));
+    TotalGeometry_old = uint8(zeros(uint64(N1,N2));
     TotalGeometry_old = Geometry(OD, ND, grid_step_mm, 1, TotalGeometry_old);
     indexes_counter = 1;
     %Internal domain creation
@@ -116,3 +116,28 @@ if parameters_condition
     SimSonic2DwriteParametersini2D(parameters,emitters,receivers,materials)
 end
 
+%% Defining Signal.sgl file
+
+% Reading JSON file with the signal from the experimental setup
+signal_condition = true;
+
+if signal_condition
+    fileName = 'signal.json';   % filename in JSON extension
+    fid = fopen(fileName);      % Opening the file
+    raw = fread(fid,inf);       % Reading the contents
+    str = char(raw');           % Transformation
+    fclose(fid);                % Closing the file
+    data = jsondecode(str);     % Using the jsondecode function to parse JSON from string
+
+
+     temporal_step_us = parameters.CFLCoefficient * parameters.Grid_step_mm/(sqrt(2)*parameters.Vmax);
+% 
+%     timebase=(0:temporal_step_us:duration);
+% 
+%     [signalI,signalQ] = gauspuls(timebase-t0,f0,bw);signal=signalQ;
+%     signal = signal'/max(signal);
+
+    figure(2)
+    plot(data.time,data.amplitude,'.-')
+    SimSonic2DWriteSgl(data.amplitude)
+end
