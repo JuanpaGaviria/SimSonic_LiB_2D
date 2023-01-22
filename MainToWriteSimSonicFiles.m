@@ -3,6 +3,7 @@ grid_step_mm = 0.0025;
 Geometry_condition = true;
 if Geometry_condition
     indexes = [7,6,2,5,2,6,3,4,3,6];  %Geometric unit
+    %indexes = [2,2,2,2,2,2,2,2,2,2];  %Geometric unit
     esp_2 = 0.066;  % anode
     esp_3 = 0.059;  % cathode
     esp_4 = 0.01;  % positive
@@ -10,6 +11,7 @@ if Geometry_condition
     esp_6 = 0.025;  % separator
     esp_7 = 0.3;  % electrolite
     espesor_list = [esp_7,esp_6,esp_2,esp_5,esp_2,esp_6,esp_3,esp_4,esp_3,esp_6];
+    %espesor_list = repmat(esp_2,1,10);
     esp_geometric_unit = sum(espesor_list,'all');
     ID = 4;
     OD = 18.5;
@@ -47,12 +49,12 @@ if parameters_condition
     parameters = GeneralParametersSimSonic;
     parameters.Grid_step_mm = grid_step_mm; % mm
     parameters.Vmax = 7.3; % mm/us
-    parameters.SimulationLen = 5; %  Microseconds
+    parameters.SimulationLen = 0.05; %  Microseconds
     parameters.SnapRecordPeriod = 0.01; % microseconds
     % Type of source terms
     % 1: source term in the equations (default)
     % 2: forced values
-    parameters.TypeSourceTerms = 2;
+    parameters.TypeSourceTerms = 1;
     %% Defining Parameters.ini2D Emitters
 
     % Defining emitters
@@ -79,22 +81,22 @@ if parameters_condition
     receiver1 = ReceiverSimSonic('T11','R001');
     receiver1.NormalOrientation = 1;
     receiver1.Origin = [4001 299];
-    receiber1.ConditionsArray = [1 1 1];
+    receiver1.ConditionsArray = [1 1 1];
 
     receiver2 = ReceiverSimSonic('T11','R002');
     receiver2.NormalOrientation = 1;
     receiver2.Origin = [4001 7702];
-    receiber2.ConditionsArray = [1 1 1];
+    receiver2.ConditionsArray = [1 1 1];
     
     receiver3 = ReceiverSimSonic('T11', 'R003');
     receiver3.NormalOrientation = 1;
     receiver3.Origin = [4001 858];
-    receiber3.ConditionsArray = [1 1 1];
+    receiver3.ConditionsArray = [1 1 1];
     
     receiver4 = ReceiverSimSonic('T11', 'R004');
     receiver4.NormalOrientation = 1;
     receiver4.Origin = [4001 3702];
-    receiber4.ConditionsArray = [1 1 1];
+    receiver4.ConditionsArray = [1 1 1];
     
     receivers = [receiver1 receiver2 receiver3 receiver4];
 
