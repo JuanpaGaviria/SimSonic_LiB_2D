@@ -20,10 +20,10 @@ fprintf(fid,'**********************************************\n');
 fprintf(fid,'************ GENERAL PARAMETERS **************\n');
 fprintf(fid,'**********************************************\n');
 
-fprintf(fid,'Grid Step           (mm)     : %5.3f\n',parameters.Grid_step_mm);
-fprintf(fid,'Vmax                (mm/us)  : %5.3f\n',parameters.Vmax);
-fprintf(fid,'Simulation Length   (us)     : %5.3f\n',parameters.SimulationLen);
-fprintf(fid,'CFL Coefficient              : %5.3f\n',parameters.CFLCoefficient);
+fprintf(fid,'Grid Step           (mm)     : %5.5f\n',parameters.Grid_step_mm);
+fprintf(fid,'Vmax                (mm/us)  : %5.5f\n',parameters.Vmax);
+fprintf(fid,'Simulation Length   (us)     : %5.5f\n',parameters.SimulationLen);
+fprintf(fid,'CFL Coefficient              : %5.5f\n',parameters.CFLCoefficient);
 fprintf(fid,'Absorption Type              : %d\n',parameters.AbsorpType);
 
 fprintf(fid,'\n**********************************************\n');
@@ -39,8 +39,8 @@ fprintf(fid,'X2_high Boundary             : %d\n',X2HighBoundary);
 fprintf(fid,'\n************** PML Parameters ****************\n');
 
 fprintf(fid,'PML Thickness   (grid step)  : %d\n',parameters.PMLThickness);
-fprintf(fid,'Vmax in PML     (mm/us)      : %5.3f\n',parameters.VmaxPML);
-fprintf(fid,'PML Efficiency     (dB)      : %5.3f\n',parameters.PMLEfficiency);
+fprintf(fid,'Vmax in PML     (mm/us)      : %5.5f\n',parameters.VmaxPML);
+fprintf(fid,'PML Efficiency     (dB)      : %5.5f\n',parameters.PMLEfficiency);
 
 
 fprintf(fid,'\n********** TYPE OF SOURCE TERMS  *************\n');
@@ -87,7 +87,7 @@ fprintf(fid,'* Index Density	c11	c22	c12	c66\n\n');
 
 fprintf(fid,'Starts Materials List\n');
 for k = 1:numel(materials)
-    fprintf(fid,'%d 	%4.2f 	%4.2f 	%4.2f	%4.2f	%4.2f 	%s\n', ...
+    fprintf(fid,'%d 	%4.5f 	%4.5f 	%4.5f	%4.5f	%4.5f 	%s\n', ...
         materials(k).Index,materials(k).Density,materials(k).CValues(1),materials(k).CValues(2), ...
         materials(k).CValues(3),materials(k).CValues(4),materials(k).Type);
 end

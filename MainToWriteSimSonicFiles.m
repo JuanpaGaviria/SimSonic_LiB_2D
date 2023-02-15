@@ -1,6 +1,6 @@
 %% Defining Geometry.map2D file
 grid_step_mm = 0.0025;
-Geometry_condition = true;
+Geometry_condition = false;
 if Geometry_condition
     indexes = [7,6,2,5,2,6,3,4,3,6];  %Geometric unit
     %indexes = [2,2,2,2,2,2,2,2,2,2];  %Geometric unit
@@ -29,14 +29,14 @@ if Geometry_condition
     for i= 1:layers/2
         OD = ND;
         ND = OD - espesor_list(indexes_counter);
-        TotalGeometry_old = Geometry(OD, ND, grid_step_mm, indexes(indexes_counter), TotalGeometry_old);
+%         TotalGeometry_old = Geometry(OD, ND, grid_step_mm, indexes(indexes_counter), TotalGeometry_old);
         indexes_counter = indexes_counter + 1;
         if indexes_counter > numel(indexes)
             indexes_counter = 1;
         end
     end
     ID = ND;
-    TotalGeometry_old = Geometry_Final(ID, grid_step_mm, 7, TotalGeometry_old);
+%     TotalGeometry_old = Geometry_Final(ID, grid_step_mm, 7, TotalGeometry_old);
 
     figure()
     imagesc(TotalGeometry_old);axis image
@@ -44,27 +44,28 @@ if Geometry_condition
 end
 
 %% Defining Parameters.ini2D genearal parameters
-parameters_condition = true;
+parameters_condition = false;
 if parameters_condition
     parameters = GeneralParametersSimSonic;
     parameters.Grid_step_mm = grid_step_mm; % mm
-    parameters.Vmax = 7.3; % mm/us
-    parameters.SimulationLen = 0.05; %  Microseconds
+    max_velocity = (1105/1934)^(1/2);
+    parameters.Vmax = 7; % mm/us
+    parameters.SimulationLen = 0.5; %  Microseconds
     parameters.SnapRecordPeriod = 0.01; % microseconds
     % Type of source terms
     % 1: source term in the equations (default)
     % 2: forced values
-    parameters.TypeSourceTerms = 1;
+    parameters.TypeSourceTerms = 2;
     %% Defining Parameters.ini2D Emitters
 
     % Defining emitters
     emitter1 = EmitterSimSonic('T11');
-    emitter1.NormalOrientation = 2;
+    emitter1.NormalOrientation = 1;
     emitter1.Origin = [4001,299];
     emitter1.ConditionsArray = [1 20 12 0 0];
 
     emitter2 = EmitterSimSonic('T22');
-    emitter2.NormalOrientation = 2;
+    emitter2.NormalOrientation = 1;
     emitter2.Origin = [4001,299];
     emitter2.ConditionsArray = [1 20 12 0 0];
 
@@ -104,15 +105,19 @@ if parameters_condition
     %% Defining Materials properties
 
     %MaterialsSimSonic(type,index,density,cValues)
-    materialWater = MaterialsSimSonic('water',0,1.0,[2.25 2.25 2.25 0.0]);
-    materialStainSteel = MaterialsSimSonic('stainlessSteel', 1, 7.93, [515 515 515 515]);
-    materialAnode = MaterialsSimSonic('anode', 2, 2.05, [1105 1105 204 450]);
-    materialCathode = MaterialsSimSonic('cathode', 3, 5.01,[422 422 106 68.1]);
-    materialPositiveC = MaterialsSimSonic('positive', 4, 8.96,[75.8 113.9 -10.5 10.5]);
-    materialNegativeC = MaterialsSimSonic('negative', 5, 2.7,[69 69 69 69]);
-    materialSeparator = MaterialsSimSonic('separator', 6, 0.55 ,[0.7 0.7 0.7 0.7]);
-    materialElectrolite = MaterialsSimSonic('electrolite', 7, 1594 ,[1.32 1.32 1.32 1.32]);
-    materials = [materialWater materialStainSteel materialAnode materialCathode materialPositiveC materialNegativeC];
+      materialWater = MaterialsSimSonic('water', 0, 1.0,[2.25 2.25 2.25 0.0]);
+      materialAnode = MaterialsSimSonic('anode', 2, 2.05, [1105 1105 204 450]);
+      materials = [materialWater, materialAnode];
+    
+%     materialWater = MaterialsSimSonic('water',0,1.0,[2.25 2.25 2.25 0.0]);
+%     materialStainSteel = MaterialsSimSonic('stainlessSteel', 1, 7.93, [515 515 515 515]);
+%     materialAnode = MaterialsSimSonic('anode', 2, 2.05, [1105 1105 204 450]);
+%     materialCathode = MaterialsSimSonic('cathode', 3, 5.01,[422 422 106 68.1]);
+%     materialPositiveC = MaterialsSimSonic('positive', 4, 8.96,[75.8 113.9 -10.5 10.5]);
+%     materialNegativeC = MaterialsSimSonic('negative', 5, 2.7,[69 69 69 69]);
+%     materialSeparator = MaterialsSimSonic('separator', 6, 0.55 ,[0.7 0.7 0.7 0.7]);
+%     materialElectrolite = MaterialsSimSonic('electrolite', 7, 1594 ,[1.32 1.32 1.32 1.32]);
+%     materials = [materialWater materialStainSteel materialAnode materialCathode materialPositiveC materialNegativeC];
 
     %% Parameters.ini2D
     SimSonic2DwriteParametersini2D(parameters,emitters,receivers,materials)
@@ -132,14 +137,14 @@ if signal_condition
     data = jsondecode(str);     % Using the jsondecode function to parse JSON from string
 
 
-     temporal_step_us = parameters.CFLCoefficient * parameters.Grid_step_mm/(sqrt(2)*parameters.Vmax);
-% 
-%     timebase=(0:temporal_step_us:duration);
-% 
-%     [signalI,signalQ] = gauspuls(timebase-t0,f0,bw);signal=signalQ;
-%     signal = signal'/max(signal);
-
+    temporal_step_us = parameters.CFLCoefficient * parameters.Grid_step_mm/(sqrt(2)*parameters.Vmax);
+    display(temporal_step_us);
+    data.time = data.time*1000000;  % Pasando a us
+    [interpolated_amplitude, interpolated_time] = signal_interpolation(data.amplitude, data.time, temporal_step_us);
+    
     figure(2)
-    plot(data.time,data.amplitude,'.-')
-    SimSonic2DWriteSgl(data.amplitude)
+    plot(interpolated_time,interpolated_amplitude,'.-')
+    interpolated_amplitude = interpolated_amplitude.';
+    SimSonic2DWriteSgl(interpolated_amplitude)
+    
 end
