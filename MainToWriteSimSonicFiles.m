@@ -1,6 +1,6 @@
 %% Defining Geometry.map2D file
 grid_step_mm = 0.0025;
-Geometry_condition = false;
+Geometry_condition = true;
 if Geometry_condition
     indexes = [7,6,2,5,2,6,3,4,3,6];  %Geometric unit
     %indexes = [2,2,2,2,2,2,2,2,2,2];  %Geometric unit
@@ -9,7 +9,8 @@ if Geometry_condition
     esp_4 = 0.01;  % positive
     esp_5 = 0.01;  % negative
     esp_6 = 0.025;  % separator
-    esp_7 = 0.3;  % electrolite
+    esp_7 = 0.3;  % electrolyte
+    % te
     espesor_list = [esp_7,esp_6,esp_2,esp_5,esp_2,esp_6,esp_3,esp_4,esp_3,esp_6];
     %espesor_list = repmat(esp_2,1,10);
     esp_geometric_unit = sum(espesor_list,'all');
@@ -29,14 +30,14 @@ if Geometry_condition
     for i= 1:layers/2
         OD = ND;
         ND = OD - espesor_list(indexes_counter);
-%         TotalGeometry_old = Geometry(OD, ND, grid_step_mm, indexes(indexes_counter), TotalGeometry_old);
+         TotalGeometry_old = Geometry(OD, ND, grid_step_mm, indexes(indexes_counter), TotalGeometry_old);
         indexes_counter = indexes_counter + 1;
         if indexes_counter > numel(indexes)
             indexes_counter = 1;
         end
     end
     ID = ND;
-%     TotalGeometry_old = Geometry_Final(ID, grid_step_mm, 7, TotalGeometry_old);
+     TotalGeometry_old = Geometry_Final(ID, grid_step_mm, 7, TotalGeometry_old);
 
     figure()
     imagesc(TotalGeometry_old);axis image
@@ -44,13 +45,13 @@ if Geometry_condition
 end
 
 %% Defining Parameters.ini2D genearal parameters
-parameters_condition = false;
+parameters_condition = true;
 if parameters_condition
     parameters = GeneralParametersSimSonic;
     parameters.Grid_step_mm = grid_step_mm; % mm
     max_velocity = (1105/1934)^(1/2);
     parameters.Vmax = 7; % mm/us
-    parameters.SimulationLen = 0.5; %  Microseconds
+    parameters.SimulationLen = 5; %  Microseconds
     parameters.SnapRecordPeriod = 0.01; % microseconds
     % Type of source terms
     % 1: source term in the equations (default)
@@ -103,21 +104,22 @@ if parameters_condition
 
 
     %% Defining Materials properties
-
-    %MaterialsSimSonic(type,index,density,cValues)
-      materialWater = MaterialsSimSonic('water', 0, 1.0,[2.25 2.25 2.25 0.0]);
-      materialAnode = MaterialsSimSonic('anode', 2, 2.05, [1105 1105 204 450]);
-      materials = [materialWater, materialAnode];
+% 
+%     %MaterialsSimSonic(type,index,density,cValues)
+%       materialWater = MaterialsSimSonic('water', 0, 1.0,[2.25 2.25 2.25 0.0]);
+%       materialAnode = MaterialsSimSonic('anode', 2, 2.05, [1105 1105 204 450]);
+%       materials = [materialWater, materialAnode];
     
-%     materialWater = MaterialsSimSonic('water',0,1.0,[2.25 2.25 2.25 0.0]);
-%     materialStainSteel = MaterialsSimSonic('stainlessSteel', 1, 7.93, [515 515 515 515]);
-%     materialAnode = MaterialsSimSonic('anode', 2, 2.05, [1105 1105 204 450]);
-%     materialCathode = MaterialsSimSonic('cathode', 3, 5.01,[422 422 106 68.1]);
-%     materialPositiveC = MaterialsSimSonic('positive', 4, 8.96,[75.8 113.9 -10.5 10.5]);
-%     materialNegativeC = MaterialsSimSonic('negative', 5, 2.7,[69 69 69 69]);
-%     materialSeparator = MaterialsSimSonic('separator', 6, 0.55 ,[0.7 0.7 0.7 0.7]);
-%     materialElectrolite = MaterialsSimSonic('electrolite', 7, 1594 ,[1.32 1.32 1.32 1.32]);
-%     materials = [materialWater materialStainSteel materialAnode materialCathode materialPositiveC materialNegativeC];
+     materialWater = MaterialsSimSonic('water',0,1.0,[2.25 2.25 2.25 0.0]);
+     materialStainSteel = MaterialsSimSonic('stainlessSteel', 1, 7.93, [206.80 139.30 133.10 133.10]);
+    %materials = [materialWater, materialStainSteel];
+         materialAnode = MaterialsSimSonic('anode', 2, 2.05, [1105 1105 204 450]);
+    materialCathode = MaterialsSimSonic('cathode', 3, 5.01,[422 422 106 68.1]);
+    materialPositiveC = MaterialsSimSonic('positive', 4, 8.96,[75.8 113.9 -10.5 10.5]);
+    materialNegativeC = MaterialsSimSonic('negative', 5, 2.7,[69 69 69 69]);
+    materialSeparator = MaterialsSimSonic('separator', 6, 0.55 ,[0.7 0.7 0.7 0.7]);
+    materialElectrolite = MaterialsSimSonic('electrolyte', 7, 1594 ,[1.32 1.32 1.32 1.32]);
+    materials = [materialWater materialStainSteel materialAnode materialCathode materialPositiveC materialNegativeC];
 
     %% Parameters.ini2D
     SimSonic2DwriteParametersini2D(parameters,emitters,receivers,materials)
