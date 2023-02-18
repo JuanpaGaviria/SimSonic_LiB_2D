@@ -2,7 +2,8 @@
 grid_step_mm = 0.0025;
 Geometry_condition = true;
 if Geometry_condition
-    indexes = [7,6,2,5,2,6,3,4,3,6];  %Geometric unit
+    indexes = [6,2,5,2,6,3,4,3,6];  %Geometric unit without electrolyte
+    %indexes = [7,6,2,5,2,6,3,4,3,6];  %Geometric unit
     %indexes = [2,2,2,2,2,2,2,2,2,2];  %Geometric unit
     esp_2 = 0.066;  % anode
     esp_3 = 0.059;  % cathode
@@ -30,7 +31,7 @@ if Geometry_condition
     for i= 1:layers/2
         OD = ND;
         ND = OD - espesor_list(indexes_counter);
-         TotalGeometry_old = Geometry(OD, ND, grid_step_mm, indexes(indexes_counter), TotalGeometry_old);
+        TotalGeometry_old = Geometry(OD, ND, grid_step_mm, indexes(indexes_counter), TotalGeometry_old);
         indexes_counter = indexes_counter + 1;
         if indexes_counter > numel(indexes)
             indexes_counter = 1;
@@ -49,7 +50,6 @@ parameters_condition = true;
 if parameters_condition
     parameters = GeneralParametersSimSonic;
     parameters.Grid_step_mm = grid_step_mm; % mm
-    max_velocity = (1105/1934)^(1/2);
     parameters.Vmax = 7; % mm/us
     parameters.SimulationLen = 5; %  Microseconds
     parameters.SnapRecordPeriod = 0.01; % microseconds
@@ -105,20 +105,21 @@ if parameters_condition
 
     %% Defining Materials properties
 % 
+    % Index Density [C11 C22 C12 C66]
 %     %MaterialsSimSonic(type,index,density,cValues)
 %       materialWater = MaterialsSimSonic('water', 0, 1.0,[2.25 2.25 2.25 0.0]);
 %       materialAnode = MaterialsSimSonic('anode', 2, 2.05, [1105 1105 204 450]);
 %       materials = [materialWater, materialAnode];
     
-     materialWater = MaterialsSimSonic('water',0,1.0,[2.25 2.25 2.25 0.0]);
-     materialStainSteel = MaterialsSimSonic('stainlessSteel', 1, 7.93, [206.80 139.30 133.10 133.10]);
+     materialWater = MaterialsSimSonic('water',0,1.0,[2.25 2.25 2.25 0.0]);  % Water
+     materialStainSteel = MaterialsSimSonic('stainlessSteel', 1, 7.93, [203.6 203.6 120.2 60.7]); % austenitic stainless steel
     %materials = [materialWater, materialStainSteel];
-         materialAnode = MaterialsSimSonic('anode', 2, 2.05, [1105 1105 204 450]);
-    materialCathode = MaterialsSimSonic('cathode', 3, 5.01,[422 422 106 68.1]);
-    materialPositiveC = MaterialsSimSonic('positive', 4, 8.96,[75.8 113.9 -10.5 10.5]);
-    materialNegativeC = MaterialsSimSonic('negative', 5, 2.7,[69 69 69 69]);
+         materialAnode = MaterialsSimSonic('anode', 2, 2.05, [1105 1105 204 450]);   % Graphite
+    materialCathode = MaterialsSimSonic('cathode', 3, 5.01,[422 422 106 68.1]);      %LCO cathode
+    materialPositiveC = MaterialsSimSonic('positive', 4, 2.7,[107.3 107.3 54.5 28.2]); % Aluminum
+    materialNegativeC = MaterialsSimSonic('negative', 5, 8.96,[170.7 171 121.0 75.6]); % Copper
     materialSeparator = MaterialsSimSonic('separator', 6, 0.55 ,[0.7 0.7 0.7 0.7]);
-    materialElectrolite = MaterialsSimSonic('electrolyte', 7, 1594 ,[1.32 1.32 1.32 1.32]);
+    %materialElectrolite = MaterialsSimSonic('electrolyte', 7, 1594 ,[1.32 1.32 1.32 1.32]);
     materials = [materialWater materialStainSteel materialAnode materialCathode materialPositiveC materialNegativeC];
 
     %% Parameters.ini2D
