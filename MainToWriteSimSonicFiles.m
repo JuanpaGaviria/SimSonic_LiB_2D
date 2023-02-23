@@ -2,7 +2,8 @@
 grid_step_mm = 0.0025;
 Geometry_condition = true;
 if Geometry_condition
-    indexes = [6,2,5,2,6,3,4,3,6];  %Geometric unit without electrolyte
+    indexes = [3];
+    %indexes = [2,5,2,3,4,3];  %Geometric unit without electrolyte and separator
     %indexes = [7,6,2,5,2,6,3,4,3,6];  %Geometric unit
     %indexes = [2,2,2,2,2,2,2,2,2,2];  %Geometric unit
     esp_2 = 0.066;  % anode
@@ -12,7 +13,10 @@ if Geometry_condition
     esp_6 = 0.025;  % separator
     esp_7 = 0.3;  % electrolyte
     % te
-    espesor_list = [esp_7,esp_6,esp_2,esp_5,esp_2,esp_6,esp_3,esp_4,esp_3,esp_6];
+    espesor_list = [esp_3];
+    %espesor_list = [esp_2,esp_5,esp_2,esp_3,esp_4,esp_3];
+
+    %espesor_list = [esp_7,esp_6,esp_2,esp_5,esp_2,esp_6,esp_3,esp_4,esp_3,esp_6];
     %espesor_list = repmat(esp_2,1,10);
     esp_geometric_unit = sum(espesor_list,'all');
     ID = 4;
@@ -38,7 +42,7 @@ if Geometry_condition
         end
     end
     ID = ND;
-     TotalGeometry_old = Geometry_Final(ID, grid_step_mm, 7, TotalGeometry_old);
+    TotalGeometry_old = Geometry_Final(ID, grid_step_mm, 3, TotalGeometry_old);
 
     figure()
     imagesc(TotalGeometry_old);axis image
@@ -51,7 +55,7 @@ if parameters_condition
     parameters = GeneralParametersSimSonic;
     parameters.Grid_step_mm = grid_step_mm; % mm
     parameters.Vmax = 7; % mm/us
-    parameters.SimulationLen = 5; %  Microseconds
+    parameters.SimulationLen = 1; %  Microseconds
     parameters.SnapRecordPeriod = 0.01; % microseconds
     % Type of source terms
     % 1: source term in the equations (default)
@@ -118,8 +122,8 @@ if parameters_condition
     materialCathode = MaterialsSimSonic('cathode', 3, 5.01,[422 422 106 68.1]);      %LCO cathode
     materialPositiveC = MaterialsSimSonic('positive', 4, 2.7,[107.3 107.3 54.5 28.2]); % Aluminum
     materialNegativeC = MaterialsSimSonic('negative', 5, 8.96,[170.7 171 121.0 75.6]); % Copper
-    materialSeparator = MaterialsSimSonic('separator', 6, 0.55 ,[0.7 0.7 0.7 0.7]);
-    %materialElectrolite = MaterialsSimSonic('electrolyte', 7, 1594 ,[1.32 1.32 1.32 1.32]);
+    %materialSeparator = MaterialsSimSonic('separator', 6, 0.55 ,[0.7 0.7 0.7 0.7]);
+    %materialElectrolyte = MaterialsSimSonic('electrolyte', 7, 1594 ,[1.32 1.32 1.32 1.32]);
     materials = [materialWater materialStainSteel materialAnode materialCathode materialPositiveC materialNegativeC];
 
     %% Parameters.ini2D
