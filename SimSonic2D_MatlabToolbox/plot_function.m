@@ -6,6 +6,6 @@ for i = 1:numel(dirInfo)
         disp(fileName)
        snapshot = SimSonic2DReadSnp2D(fileName);
        figPlot;imagesc(snapshot.Data)
-       pause(0.1)
+       pause(0.001)
     end
 end
