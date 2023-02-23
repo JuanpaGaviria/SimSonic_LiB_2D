@@ -5,6 +5,6 @@ for i = 1:numel(dirInfo)
     if  startsWith(fileName,'V_') && endsWith(fileName,'.snp2D') 
        snapshot = SimSonic2DReadSnp2D(fileName);
        figPlot;imagesc(snapshot.Data)
-       pause(0.1)
+       pause(0.001)
     end
 end
