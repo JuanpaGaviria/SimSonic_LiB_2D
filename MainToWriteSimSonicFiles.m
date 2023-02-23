@@ -2,7 +2,7 @@
 grid_step_mm = 0.0025;
 Geometry_condition = true;
 if Geometry_condition
-    indexes = [3,5,3,2];  %Geometric unit without electrolyte
+    indexes = [3,4,3,2,5,2];  %Geometric unit without electrolyte
     esp_2 = 0.066;  % anode
     esp_3 = 0.059;  % cathode
     esp_4 = 0.01;  % positive
@@ -10,7 +10,7 @@ if Geometry_condition
     esp_6 = 0.025;  % separator
     esp_7 = 0.3;  % electrolyte
     % te
-    espesor_list = [esp_3,esp_5, esp_3, esp_2];
+    espesor_list = [esp_3,esp_4, esp_3, esp_2,esp_5,esp_2];
     %espesor_list = repmat(esp_2,1,10);
     esp_geometric_unit = sum(espesor_list,'all');
     ID = 4;
@@ -31,7 +31,7 @@ if Geometry_condition
         ND = OD - espesor_list(indexes_counter);
         TotalGeometry_old = Geometry(OD, ND, grid_step_mm, indexes(indexes_counter), TotalGeometry_old);
         indexes_counter = indexes_counter + 1;
-        if i == 4
+        if i == 6
            break;
         end
         if indexes_counter > numel(indexes)
@@ -53,8 +53,8 @@ if parameters_condition
     parameters = GeneralParametersSimSonic;
     parameters.Grid_step_mm = grid_step_mm; % mm
     parameters.Vmax = (1105/2.05)^(1/2);
-    parameters.SimulationLen = 0.25; %  Microseconds
-    parameters.SnapRecordPeriod = 0.005; % microseconds
+    parameters.SimulationLen = 5; %  Microseconds
+    parameters.SnapRecordPeriod = 0.1; % microseconds
     % Type of source terms
     % 1: source term in the equations (default)
     % 2: forced values
