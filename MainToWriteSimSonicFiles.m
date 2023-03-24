@@ -1,17 +1,15 @@
 %% Defining Geometry.map2D file
 grid_step_mm = 0.0025;
-Geometry_condition = true;
+Geometry_condition = false;
 if Geometry_condition
     indexes = [3,4,3,2,5,2];  %Geometric unit without electrolyte
     esp_2 = 0.066;  % anode
     esp_3 = 0.059;  % cathode
     esp_4 = 0.01;  % positive
     esp_5 = 0.01;  % negative
-    esp_6 = 0.025;  % separator
-    esp_7 = 0.3;  % electrolyte
-    % te
+%     esp_6 = 0.025;  % separator
+%     esp_7 = 0.3;  % electrolyte
     espesor_list = [esp_3,esp_4, esp_3, esp_2,esp_5,esp_2];
-    %espesor_list = repmat(esp_2,1,10);
     esp_geometric_unit = sum(espesor_list,'all');
     ID = 4;
     OD = 18.5;
@@ -31,17 +29,13 @@ if Geometry_condition
         ND = OD - espesor_list(indexes_counter);
         TotalGeometry_old = Geometry(OD, ND, grid_step_mm, indexes(indexes_counter), TotalGeometry_old);
         indexes_counter = indexes_counter + 1;
-        if i == 6
-           break;
-        end
         if indexes_counter > numel(indexes)
             indexes_counter = 1;
         end
-        
     end
-    ID = ND;
-%     TotalGeometry_old = Geometry_Final(ID, grid_step_mm, 7, TotalGeometry_old);
-
+    OD = ND;
+    ND = OD - 0.1;
+    TotalGeometry_old = Geometry(OD, ND, grid_step_mm, 6, TotalGeometry_old);
     figure()
     imagesc(TotalGeometry_old);axis image
     SimSonic2DWriteMap2D(TotalGeometry_old)
@@ -53,8 +47,8 @@ if parameters_condition
     parameters = GeneralParametersSimSonic;
     parameters.Grid_step_mm = grid_step_mm; % mm
     parameters.Vmax = (1105/2.05)^(1/2);
-    parameters.SimulationLen = 5; %  Microseconds
-    parameters.SnapRecordPeriod = 0.1; % microseconds
+    parameters.SimulationLen = 15; %  Microseconds
+    parameters.SnapRecordPeriod = 0.25; % microseconds
     % Type of source terms
     % 1: source term in the equations (default)
     % 2: forced values
@@ -99,7 +93,7 @@ if parameters_condition
     
     receiver4 = ReceiverSimSonic('T11', 'R004');
     receiver4.NormalOrientation = 1;
-    receiver4.Origin = [4001 3702];
+    receiver4.Origin = [4001 4001];
     receiver4.ConditionsArray = [1 1 1];
     
     receivers = [receiver1 receiver2 receiver3 receiver4];
@@ -109,16 +103,16 @@ if parameters_condition
 % 
     % Index Density [C11 C22 C12 C66]
     
-     materialWater = MaterialsSimSonic('water',0,1.0,[2.25 2.25 2.25 0.0]);  % Water
-     materialStainSteel = MaterialsSimSonic('stainlessSteel', 1, 7.93, [203.6 203.6 120.2 60.7]); % austenitic stainless steel
-    %materials = [materialWater, materialStainSteel];
-         materialAnode = MaterialsSimSonic('anode', 2, 2.05, [1105 1105 204 450]);   % Graphite
+    materialWater = MaterialsSimSonic('water',0,1.0,[2.25 2.25 2.25 0.0]);  % Water
+    materialStainSteel = MaterialsSimSonic('stainlessSteel', 1, 7.93, [203.6 203.6 120.2 60.7]); % austenitic stainless steel    
+    materialAnode = MaterialsSimSonic('anode', 2, 2.05, [1105 1105 204 450]);   % Graphite
     materialCathode = MaterialsSimSonic('cathode', 3, 5.01,[422 422 106 68.1]);      %LCO cathode
     materialPositiveC = MaterialsSimSonic('positive', 4, 2.7,[107.3 107.3 54.5 28.2]); % Aluminum
     materialNegativeC = MaterialsSimSonic('negative', 5, 8.96,[170.7 171 121.0 75.6]); % Copper
-    materialSeparator = MaterialsSimSonic('separator', 6, 0.55 ,[0.7 0.7 0.7 0.7]);
-    %materialElectrolite = MaterialsSimSonic('electrolyte', 7, 1594 ,[1.32 1.32 1.32 1.32]);
-    materials = [materialWater materialStainSteel materialAnode materialCathode materialPositiveC materialNegativeC];
+%     materialSeparator = MaterialsSimSonic('separator', 6, 0.55 ,[0.7 0.7 0.7 0.7]);
+%     materialElectrolite = MaterialsSimSonic('electrolyte', 7, 1594 ,[1.32 1.32 1.32 1.32]);
+    materialStainSteelPin = MaterialsSimSonic('stainlessSteelPin', 6, 7.93, [203.6 203.6 120.2 60.7]); % austenitic stainless
+    materials = [materialWater materialStainSteel materialAnode materialCathode materialPositiveC materialNegativeC materialStainSteelPin];
 
     %% Parameters.ini2D
     SimSonic2DwriteParametersini2D(parameters,emitters,receivers,materials)
