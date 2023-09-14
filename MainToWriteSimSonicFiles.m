@@ -22,7 +22,6 @@ if Geometry_condition
     esp_7 = 0.3;  % electrolyte
     % te
     espesor_list = [esp_3,esp_4, esp_3, esp_6, esp_2,esp_5,esp_2, esp_6];
-    %espesor_list = repmat(esp_2,1,10);
     esp_geometric_unit = sum(espesor_list,'all');
     ID = 0.3;
     OD = 18.4;
@@ -42,17 +41,13 @@ if Geometry_condition
         ND = OD - espesor_list(indexes_counter);
         TotalGeometry_old = Geometry(OD, ND, grid_step_mm, indexes(indexes_counter), TotalGeometry_old);
         indexes_counter = indexes_counter + 1;
-%         if i == 6
-%            break;
-%         end
         if indexes_counter > numel(indexes)
             indexes_counter = 1;
         end
-        
     end
     ID = ND;
     TotalGeometry_old = Geometry_Final(ID, grid_step_mm, 5, TotalGeometry_old);
-    %TotalGeometry_old(TotalGeometry_old==5) = 1;
+    
     fig = figure();fig.Position = [476 342 827 524];
     imagesc(0:grid_step_mm:external_dim_1,0:grid_step_mm:external_dim_2,TotalGeometry_old);axis image
     ax2=gca;
@@ -116,7 +111,7 @@ if parameters_condition
     
     receiver4 = ReceiverSimSonic('T11', 'R004');
     receiver4.NormalOrientation = 1;
-    receiver4.Origin = [4001 3702];
+    receiver4.Origin = [4001 4001];
     receiver4.ConditionsArray = [1 1 1];
     
     receivers = [receiver1 receiver2 receiver3 receiver4];
@@ -135,7 +130,6 @@ if parameters_condition
     % Separator lame parameters [GPa]
     lambdaSeparator = 1.42; muSeparator = 0.12;
 
-% 
     % Index Density [C11 C22 C12 C66]
 
     materialOil = MaterialsSimSonic('water',0,0.83,[2.25 2.25 2.25 0.0]);  % Oil
@@ -147,7 +141,7 @@ if parameters_condition
     materialSeparator = MaterialsSimSonic('separator', 6, 1.68 ,[lambdaSeparator+2*muSeparator lambdaSeparator+2*muSeparator lambdaSeparator muSeparator]);
     %materialElectrolyte = MaterialsSimSonic('electrolyte', 7, 1594 ,[1.32 1.32 1.32 1.32]);
     materials = [materialOil materialStainSteel materialAnode materialCathode materialPositiveC materialNegativeC materialSeparator];
-    
+
 %     materialWater = MaterialsSimSonic('water',0,0.83,[2.25 2.25 2.25 0.0]);  % Water
 %     materialStainSteel = MaterialsSimSonic('stainlessSteel', 1, 7.93, [203.6 203.6 120.2 60.7]); % austenitic stainless steel
 %     materialAnode = MaterialsSimSonic('Graphite', 2, 2.05, [1105 1105 204 450]);   % Graphite
