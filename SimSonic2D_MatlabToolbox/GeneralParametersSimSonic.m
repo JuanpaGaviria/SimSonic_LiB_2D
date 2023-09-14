@@ -24,7 +24,7 @@ classdef GeneralParametersSimSonic
 
         % Record variables
         SnapRecordPeriod (1,1) double; % [us]
-        RecordVAR        (1,6) uint8 = [1 0 0 0 0 1];
+        RecordVAR        (1,6) uint8 = [0 0 0 0 0 1];
         % ["T11" "T22" "T12" "V1" "V2" "V"];
 
         % Type of source terms
