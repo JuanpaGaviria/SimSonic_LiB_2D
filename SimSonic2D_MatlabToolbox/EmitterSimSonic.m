@@ -3,13 +3,12 @@ classdef EmitterSimSonic
     %   Detailed explanation goes here
 
     properties
-        Hola;
         Type                (1,:) char;
         SignalFileName      (1,:) char = 'signal.sgl';
         NormalOrientation   (1,1) uint8;
         Origin              (1,2) uint64;
         ConditionsArray     (1,5) uint64;
-        SpecialCondArray    (1,2) uint64 = [0 1.5];
+        SpecialCondArray    (1,2) double = [0,1.5];
     end
 
     methods

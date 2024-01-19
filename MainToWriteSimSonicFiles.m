@@ -10,7 +10,7 @@ fontSize = graph.FontSize;
 %% Defining Geometry.map2D file
 
 %
-grid_step_mm = 0.0025;
+grid_step_mm = 0.0025; % Each pixel represents this mm
 Geometry_condition = true;
 if Geometry_condition
     indexes = [3,4,3,6,2,5,2,6];  %Geometric unit without electrolyte and separator
@@ -48,7 +48,7 @@ if Geometry_condition
     ID = ND;
     TotalGeometry_old = Geometry_Final(ID, grid_step_mm, 5, TotalGeometry_old);
     
-    fig = figure();fig.Position = [476 342 827 524];
+    fig = figure();fig.Position = [349 223 790 643];
     imagesc(0:grid_step_mm:external_dim_1,0:grid_step_mm:external_dim_2,TotalGeometry_old);axis image
     ax2=gca;
     set(ax2,'FontSize',axisSize+5,'LineWidth',axisWidth,'TickLabelInterpreter',interpreter,'Box','on')
@@ -63,7 +63,7 @@ if parameters_condition
     parameters = GeneralParametersSimSonic;
     parameters.Grid_step_mm = grid_step_mm; % mm
     parameters.Vmax = (1105/2.05)^(1/2);
-    parameters.SimulationLen = 20; %  Microseconds
+    parameters.SimulationLen = 22; %  Microseconds
     parameters.SnapRecordPeriod = 0.2; % microseconds
     % Type of source terms
     % 1: source term in the equations (default)
@@ -73,15 +73,17 @@ if parameters_condition
 
     % Defining emitters
     emitter1 = EmitterSimSonic('T11');
-    emitter1.NormalOrientation = 2;
-    emitter1.Origin = [4001,299];
+    emitter1.NormalOrientation = 2; %1
+    emitter1.Origin = [4001,320];
+    %emitter1.Origin = [4001,320];
+    %emitter1.ConditionsArray = [1 20 10/grid_step_mm 0 0];
     emitter1.ConditionsArray = [1 20 12 0 0];
-    %emitter1.ConditionsArray = [1 20 4000 0 0];
 
     emitter2 = EmitterSimSonic('T22');
-    emitter2.NormalOrientation = 2;
-    emitter2.Origin = [4001,299];
-    %emitter1.ConditionsArray = [1 20 4000 0 0];
+    emitter2.NormalOrientation = 2; %1
+    emitter2.Origin = [4001,320];
+    %emitter2.Origin = [4001,320];
+    %emitter2.ConditionsArray = [1 20 10/grid_step_mm 0 0];
     emitter2.ConditionsArray = [1 20 12 0 0];
 
     %emitter2 = EmitterSimSonic('T22');
@@ -94,27 +96,94 @@ if parameters_condition
     % NBElts (Number N of (identical) elements in the array)
     % Pitch (center to center distance between two consecutive elements)
     % Width (dimension of each elements. each element is integrating over its width)
+    
+    
     receiver1 = ReceiverSimSonic('T11','R001');
     receiver1.NormalOrientation = 1;
-    receiver1.Origin = [4001 299];
+    receiver1.Origin = [4001 319];
     receiver1.ConditionsArray = [1 1 1];
 
     receiver2 = ReceiverSimSonic('T11','R002');
     receiver2.NormalOrientation = 1;
-    receiver2.Origin = [4001 7702];
+    receiver2.Origin = [4001 320];
     receiver2.ConditionsArray = [1 1 1];
-    
-    receiver3 = ReceiverSimSonic('T11', 'R003');
+
+    receiver3 = ReceiverSimSonic('T11','R003');
     receiver3.NormalOrientation = 1;
-    receiver3.Origin = [4001 858];
+    receiver3.Origin = [4001 321];
     receiver3.ConditionsArray = [1 1 1];
-    
-    receiver4 = ReceiverSimSonic('T11', 'R004');
+
+    receiver4 = ReceiverSimSonic('T11','R004');
     receiver4.NormalOrientation = 1;
-    receiver4.Origin = [4001 4001];
+    receiver4.Origin = [4001 519];
     receiver4.ConditionsArray = [1 1 1];
+
+    receiver5 = ReceiverSimSonic('T11','R005');
+    receiver5.NormalOrientation = 1;
+    receiver5.Origin = [4001 520];
+    receiver5.ConditionsArray = [1 1 1];
+
+    receiver6 = ReceiverSimSonic('T11','R006');
+    receiver6.NormalOrientation = 1;
+    receiver6.Origin = [4001 521];
+    receiver6.ConditionsArray = [1 1 1];
     
-    receivers = [receiver1 receiver2 receiver3 receiver4];
+    receiver7 = ReceiverSimSonic('T11','R007');
+    receiver7.NormalOrientation = 1;
+    receiver7.Origin = [4001 7841];
+    receiver7.ConditionsArray = [1 1 1];
+
+    receiver8 = ReceiverSimSonic('T11','R008');
+    receiver8.NormalOrientation = 1;
+    receiver8.Origin = [4001 7842];
+    receiver8.ConditionsArray = [1 1 1];
+
+    receiver9 = ReceiverSimSonic('T11','R009');
+    receiver9.NormalOrientation = 1;
+    receiver9.Origin = [4001 7843];
+    receiver9.ConditionsArray = [1 1 1];
+
+    receiver10 = ReceiverSimSonic('T11','R010');
+    receiver10.NormalOrientation = 1;
+    receiver10.Origin = [4001 7681];
+    receiver10.ConditionsArray = [1 1 1];
+
+    receiver11 = ReceiverSimSonic('T11','R011');
+    receiver11.NormalOrientation = 1;
+    receiver11.Origin = [4001 7682];
+    receiver11.ConditionsArray = [1 1 1];
+
+    receiver12 = ReceiverSimSonic('T11','R012');
+    receiver12.NormalOrientation = 1;
+    receiver12.Origin = [4001 7683];
+    receiver12.ConditionsArray = [1 1 1];
+
+    receiver13 = ReceiverSimSonic('T11','R013');
+    receiver13.NormalOrientation = 1;
+    receiver13.Origin = [319 4001];
+    receiver13.ConditionsArray = [1 1 1];
+
+    receiver14 = ReceiverSimSonic('T11','R014');
+    receiver14.NormalOrientation = 1;
+    receiver14.Origin = [320 4001];
+    receiver14.ConditionsArray = [1 1 1];
+
+    receiver15 = ReceiverSimSonic('T11','R015');
+    receiver15.NormalOrientation = 1;
+    receiver15.Origin = [7681 4001];
+    receiver15.ConditionsArray = [1 1 1];
+
+    receiver16 = ReceiverSimSonic('T11','R016');
+    receiver16.NormalOrientation = 1;
+    receiver16.Origin = [7682 4001];
+    receiver16.ConditionsArray = [1 1 1];
+
+  
+    
+    receivers = [receiver1 receiver2 receiver3 receiver4 ...
+        receiver5 receiver6 receiver7 receiver8 ...
+        receiver9 receiver10 receiver11 receiver12 ...
+        receiver13 receiver14 receiver15 receiver16];
 
 
     %% Defining Materials properties
