@@ -65,6 +65,7 @@ if parameters_condition
     parameters.Vmax = (1105/2.05)^(1/2);
     parameters.SimulationLen = 22; %  Microseconds
     parameters.SnapRecordPeriod = 0.2; % microseconds
+    parameters.RecordVAR = [0 0 0 0 1]; % Snapshots desired
     % Type of source terms
     % 1: source term in the equations (default)
     % 2: forced values
